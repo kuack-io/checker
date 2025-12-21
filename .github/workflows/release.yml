@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Prepare dist directory
         run: |
@@ -69,7 +69,7 @@ jobs:
       new_release_git_tag: ${{ steps.semantic.outputs.new_release_git_tag }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
           token: ${{ secrets.SEMANTIC_RELEASE_TOKEN }} # we shouldn't use default token here! It will be cached and will break semantic release!
@@ -117,7 +117,7 @@ jobs:
       TAG_NAME: ${{ needs.semantic-release.outputs.new_release_git_tag }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Download raw build outputs
         uses: actions/download-artifact@v4
