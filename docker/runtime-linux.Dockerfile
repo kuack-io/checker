@@ -1,3 +1,3 @@
 FROM gcr.io/distroless/cc-debian12:nonroot
-COPY kuack-checker /kuack-checker
+COPY --chmod=0755 kuack-checker /kuack-checker
 ENTRYPOINT ["/kuack-checker"]
