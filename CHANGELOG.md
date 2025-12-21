@@ -1,3 +1,9 @@
+## [1.0.4](https://github.com/kuack-io/checker/compare/1.0.3...1.0.4) (2025-12-21)
+
+### Bug Fixes
+
+* assets upload non-versioned binary names ([fd0075f](https://github.com/kuack-io/checker/commit/fd0075fad9f3187e6bcc6683cdc4b89b40d3fd60))
+
 ## [1.0.3](https://github.com/kuack-io/checker/compare/1.0.2...1.0.3) (2025-12-21)
 
 ### Dependencies
