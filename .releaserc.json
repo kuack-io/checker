@@ -14,6 +14,7 @@
     [
       "@semantic-release/release-notes-generator",
       {
+        "preset": "conventionalcommits",
         "presetConfig": {
           "types": [
             { "type": "feat", "section": "Features" },
@@ -40,11 +41,11 @@
       {
         "assets": [
           {
-            "path": "release-artifacts/kuack-checker-${nextRelease.version}-linux-x86_64.tar.gz",
+            "path": "release-artifacts/kuack-checker-*-linux-x86_64.tar.gz",
             "label": "Linux x86_64 binary"
           },
           {
-            "path": "release-artifacts/kuack-checker-${nextRelease.version}-wasm32-web.tar.gz",
+            "path": "release-artifacts/kuack-checker-*-wasm32-web.tar.gz",
             "label": "WASM web bundle"
           }
         ]
