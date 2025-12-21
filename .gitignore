@@ -1,0 +1,11 @@
+.idea/
+.vscode/
+target/
+.DS_Store
+Thumbs.db
+kuack-checker-linux-x64
+kuack-checker-browser.wasm
+dist/
+release-artifacts/
+cobertura.xml
+tarpaulin-report.html
