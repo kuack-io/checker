@@ -29,11 +29,7 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: '3.x'
-      - name: Cache pre-commit
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pre-commit
-          key: pre-commit-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml') }}
+          cache: 'pip'
       - name: Run pre-commit
         uses: pre-commit/action@v3.0.1
 
