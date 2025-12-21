@@ -1,0 +1,38 @@
+# Commit Message Template
+
+# Follow the Conventional Commits specification:
+# https://www.conventionalcommits.org/
+
+# Format: <type>(<scope>): <subject>
+#
+# <type> - Required. One of:
+#   feat:     A new feature
+#   fix:      A bug fix
+#   build:    Changes to build system or dependencies
+#   ci:       Changes to CI configuration files and scripts
+#   test:     Adding or correcting tests
+#   docs:     Documentation only changes
+#   refactor: Code change that neither fixes a bug nor adds a feature
+#   perf:     Code change that improves performance
+#   style:    Changes that do not affect the meaning of the code (formatting)
+#   chore:    Other changes that don't modify src or test files
+#   revert:   Reverts a previous commit
+#
+# <scope> - Optional. Component or module name (e.g., "http", "dns", "build")
+#
+# <subject> - Required. Brief description in imperative mood
+#
+# Breaking changes:
+#   - Add "BREAKING CHANGE:" in the commit body or footer
+#   - Or use "!" after type/scope: feat!: breaking change
+#
+# Footer:
+#   - Refs: #123, #456 (reference issues)
+#   - Closes: #123 (close issues)
+#   - BREAKING CHANGE: description
+#
+# Examples:
+#   feat(dns): add DNS lookup timing measurement
+#   fix(http): correct TTFB calculation for chunked responses
+#   docs: update README with environment variables
+#   feat!: change metrics output format to JSON

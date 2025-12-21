@@ -1,0 +1,9 @@
+target/
+pkg/
+.git/
+.gitlab/
+.gitignore
+.gitlab-ci.yml
+.pre-commit-config.yaml
+kuack-checker-linux-x64
+kuack-checker-browser.wasm

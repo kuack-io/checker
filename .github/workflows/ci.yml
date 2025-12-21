@@ -1,0 +1,166 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: 0 # prevent incremental build artifacts from bloating cache/time
+  CARGO_REGISTRIES_CRATES_IO_PROTOCOL: sparse # faster sparse registry updates
+
+jobs:
+  pre-commit:
+    name: Pre-commit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Run pre-commit
+        uses: pre-commit/action@v3.0.1
+
+  fmt:
+    name: Format
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.92.0
+          components: rustfmt
+      - name: Run fmt check
+        run: cargo fmt --all --check
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.92.0
+          components: clippy
+      - name: Cache cargo artifacts
+        uses: Swatinem/rust-cache@v2
+      - name: Run clippy
+        run: cargo clippy --all-targets --all-features -- -D warnings
+
+  audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.92.0
+      - name: Install cargo-audit
+        uses: taiki-e/install-action@cargo-audit
+      - name: Run cargo audit
+        run: cargo audit
+
+  deny:
+    name: Dependency Policy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      # cargo-deny is a standalone binary, it doesn't need a rust toolchain installed
+      - name: Install cargo-deny
+        uses: taiki-e/install-action@cargo-deny
+      - name: Run cargo deny
+        run: cargo deny check
+
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.92.0
+      - name: Cache cargo artifacts
+        uses: Swatinem/rust-cache@v2
+      - name: Run test suite
+        run: cargo test --all-features
+
+  coverage:
+    name: Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.92.0
+      - name: Install cargo-tarpaulin
+        uses: taiki-e/install-action@cargo-tarpaulin
+      - name: Run coverage
+        run: cargo tarpaulin --out Xml --fail-under 90 --exclude-files src/main.rs
+
+  build:
+    name: Build ${{ matrix.target }}
+    runs-on: ubuntu-latest
+    needs: [pre-commit, fmt, lint, audit, deny, test]
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: x86_64-unknown-linux-gnu
+            kind: native
+            artifact: kuack-checker-linux-x64
+          - target: wasm32-unknown-unknown
+            kind: wasm-pack
+            artifact: kuack-checker-wasm
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.92.0
+          targets: ${{ matrix.target }}
+      - name: Cache cargo artifacts
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ matrix.target }}-release # release builds have different artifacts
+      - name: Prepare dist directory
+        run: |
+          rm -rf dist
+          mkdir -p dist
+      - name: Build release artifacts
+        run: |
+          set -euo pipefail
+          rustup target add ${{ matrix.target }}
+          if [ "${{ matrix.kind }}" = "native" ]; then
+            cargo build --release --target ${{ matrix.target }}
+            strip target/x86_64-unknown-linux-gnu/release/kuack-checker
+            cp target/x86_64-unknown-linux-gnu/release/kuack-checker dist/kuack-checker
+          else
+            if ! command -v wasm-pack >/dev/null 2>&1; then
+              cargo install wasm-pack --locked
+            fi
+            wasm-pack build --release --target web
+            rm -rf dist/pkg
+            cp -R pkg dist/pkg
+          fi
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: dist
