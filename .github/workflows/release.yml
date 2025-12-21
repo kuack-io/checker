@@ -94,6 +94,7 @@ jobs:
             @semantic-release/exec
             @semantic-release/git
             @semantic-release/github
+            conventional-changelog-conventionalcommits
         env:
           GITHUB_TOKEN: ${{ secrets.SEMANTIC_RELEASE_TOKEN }}
           RELEASE_DIST_DIR: dist
