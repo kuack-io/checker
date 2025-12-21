@@ -1,3 +1,9 @@
+## [1.0.7](https://github.com/kuack-io/checker/compare/1.0.6...1.0.7) (2025-12-21)
+
+### Bug Fixes
+
+* make binary executable ([f9682a9](https://github.com/kuack-io/checker/commit/f9682a9340d5157dc735ed9729c89ee25436d0df))
+
 ## [1.0.6](https://github.com/kuack-io/checker/compare/1.0.5...1.0.6) (2025-12-21)
 
 ### Bug Fixes
