@@ -36,6 +36,7 @@ mkdir -p "$OUTPUT_DIR"
 
 LINUX_ARCHIVE="$OUTPUT_DIR/kuack-checker-linux-x86_64.tar.gz"
 cp "$LINUX_BIN" "$OUTPUT_DIR/kuack-checker"
+chmod +x "$OUTPUT_DIR/kuack-checker"
 tar -C "$OUTPUT_DIR" -czf "$LINUX_ARCHIVE" kuack-checker
 rm -f "$OUTPUT_DIR/kuack-checker"
 
