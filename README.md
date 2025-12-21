@@ -30,6 +30,8 @@ Then open <http://localhost:8087/test-browser.html>
 
 ### Docker (Linux)
 
+Note: Docker commands may require `sudo` depending on your system configuration.
+
 ```bash
 docker run --rm -e TARGET_URL=https://kuack.io ghcr.io/kuack-io/checker:latest
 ```
