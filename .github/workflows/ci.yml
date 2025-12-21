@@ -239,10 +239,8 @@ jobs:
             echo "One or more jobs failed or were cancelled"
             exit 1
           fi
-
           if [[ "${{ contains(needs.*.result, 'skipped') }}" == "true" ]]; then
             echo "One or more jobs were skipped, but strictly required"
             exit 1
           fi
-
           echo "All required checks passed"
