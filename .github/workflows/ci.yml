@@ -7,6 +7,10 @@ on:
     branches: ["main"]
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   CARGO_TERM_COLOR: always
   CARGO_INCREMENTAL: 0 # prevent incremental build artifacts from bloating cache/time
@@ -20,11 +24,28 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.x'
       - name: Run pre-commit
         uses: pre-commit/action@v3.0.1
+
+  prepare:
+    name: Prepare
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.92.0
+      - name: Cache cargo artifacts
+        uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: "debug-build"
+      - name: Build dependencies
+        run: cargo build --all-targets --all-features
 
   fmt:
     name: Format
@@ -43,6 +64,7 @@ jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
+    needs: prepare
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -53,6 +75,8 @@ jobs:
           components: clippy
       - name: Cache cargo artifacts
         uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: "debug-build"
       - name: Run clippy
         run: cargo clippy --all-targets --all-features -- -D warnings
 
@@ -86,6 +110,7 @@ jobs:
   test:
     name: Tests
     runs-on: ubuntu-latest
+    needs: prepare
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -95,6 +120,8 @@ jobs:
           toolchain: 1.92.0
       - name: Cache cargo artifacts
         uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: "debug-build"
       - name: Run test suite
         run: cargo test --all-features
 
@@ -108,10 +135,14 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: 1.92.0
+      - name: Cache cargo artifacts
+        uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: "coverage-build" # tarpaulin recompiles binaries with extra flags, it can't share cache from prepare job
       - name: Install cargo-tarpaulin
         uses: taiki-e/install-action@cargo-tarpaulin
       - name: Run coverage
-        run: cargo tarpaulin --out Xml --fail-under 90 --exclude-files src/main.rs
+        run: cargo tarpaulin --skip-clean --out Xml --fail-under 90 --exclude-files src/main.rs
 
   build:
     name: Build ${{ matrix.target }}
@@ -160,7 +191,7 @@ jobs:
             cp -R pkg dist/pkg
           fi
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ matrix.artifact }}
           path: dist
