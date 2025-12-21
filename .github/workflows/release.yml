@@ -19,21 +19,17 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 1
-
       - name: Prepare dist directory
         run: |
           rm -rf dist
           mkdir -p dist
-
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: 1.92.0
           targets: wasm32-unknown-unknown
-
       - name: Cache cargo artifacts
         uses: Swatinem/rust-cache@v2
-
       - name: Build Linux binary
         run: |
           set -euo pipefail
@@ -42,7 +38,6 @@ jobs:
           strip target/x86_64-unknown-linux-gnu/release/kuack-checker
           mkdir -p dist/linux
           cp target/x86_64-unknown-linux-gnu/release/kuack-checker dist/linux/kuack-checker
-
       - name: Build WASM bundle
         run: |
           set -euo pipefail
@@ -54,7 +49,6 @@ jobs:
           rm -rf dist/wasm/pkg
           cp -R pkg dist/wasm/pkg
           cp test-browser.html dist/wasm/
-
       - name: Upload build outputs
         uses: actions/upload-artifact@v6
         with:
@@ -75,18 +69,15 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.SEMANTIC_RELEASE_TOKEN }} # we shouldn't use default token here! It will be cached and will break semantic release!
-
       - name: Download build outputs
         uses: actions/download-artifact@v7
         with:
           name: release-build
           path: dist
-
       - name: Configure git identity
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
       - name: Semantic Release
         id: semantic
         uses: cycjimmy/semantic-release-action@v6
@@ -100,7 +91,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.SEMANTIC_RELEASE_TOKEN }}
           RELEASE_DIST_DIR: dist
-
       - name: Upload packaged release artifacts
         if: steps.semantic.outputs.new_release_published == 'true'
         uses: actions/upload-artifact@v6
@@ -122,26 +112,21 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 1
-
       - name: Download raw build outputs
         uses: actions/download-artifact@v7
         with:
           name: release-build
           path: dist
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-
       - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Build linux runtime image
         run: |
           docker buildx build \
@@ -150,7 +135,6 @@ jobs:
             -f docker/runtime-linux.Dockerfile \
             -t $IMAGE_NAME:linux-$TAG_NAME \
             dist/linux
-
       - name: Build WASM runtime image
         run: |
           docker buildx build \
@@ -159,7 +143,6 @@ jobs:
             -f docker/runtime-wasm.Dockerfile \
             -t $IMAGE_NAME:wasm-$TAG_NAME \
             dist/wasm
-
       - name: Create multi-platform manifest
         run: |
           docker buildx imagetools create \
