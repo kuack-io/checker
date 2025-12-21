@@ -1,3 +1,9 @@
+## [1.0.5](https://github.com/kuack-io/checker/compare/1.0.4...1.0.5) (2025-12-21)
+
+### Dependencies
+
+* **deps:** bump actions/checkout from 4 to 6 ([1be68a6](https://github.com/kuack-io/checker/commit/1be68a6987cd1536d2afd69030f86fe60951725a))
+
 ## [1.0.4](https://github.com/kuack-io/checker/compare/1.0.3...1.0.4) (2025-12-21)
 
 ### Bug Fixes
