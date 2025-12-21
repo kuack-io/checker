@@ -1,3 +1,5 @@
+## [1.0.1](https://github.com/kuack-io/checker/compare/1.0.0...1.0.1) (2025-12-21)
+
 # 1.0.0 (2025-12-21)
 
 
