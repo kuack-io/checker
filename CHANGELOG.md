@@ -1,3 +1,9 @@
+## [1.0.8](https://github.com/kuack-io/checker/compare/1.0.7...1.0.8) (2025-12-21)
+
+### Dependencies
+
+* **deps:** bump actions/download-artifact from 4 to 7 ([ede28da](https://github.com/kuack-io/checker/commit/ede28da1d5d495861ed3f725d74cea3bf98678e2))
+
 ## [1.0.7](https://github.com/kuack-io/checker/compare/1.0.6...1.0.7) (2025-12-21)
 
 ### Bug Fixes
