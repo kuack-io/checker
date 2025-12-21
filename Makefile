@@ -10,7 +10,7 @@ build-browser:
 build-all: build-linux build-browser
 
 run-linux: build-linux
-	TARGET_URL=https://konsti.work ./kuack-checker-linux-x64
+	TARGET_URL=https://kuack.io ./kuack-checker-linux-x64
 
 run-browser: build-browser
 	@echo "Stopping any existing server on port 8080..."
