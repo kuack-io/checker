@@ -1,3 +1,9 @@
+## [1.0.3](https://github.com/kuack-io/checker/compare/1.0.2...1.0.3) (2025-12-21)
+
+### Dependencies
+
+* **deps:** bump wiremock from 0.5.22 to 0.6.5 ([ab85b3a](https://github.com/kuack-io/checker/commit/ab85b3a2c53a9c2ff56321b1e591f76cd7320696))
+
 ## [1.0.2](https://github.com/kuack-io/checker/compare/1.0.1...1.0.2) (2025-12-21)
 
 ### Dependencies
