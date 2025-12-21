@@ -27,9 +27,15 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: '3.x'
+      - name: Cache pre-commit
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml') }}
       - name: Run pre-commit
         uses: pre-commit/action@v3.0.1
 
+  # prepare, coverage, build and pre-commit still run on merge to main to update the cache used in PRs
   prepare:
     name: Prepare
     runs-on: ubuntu-latest
@@ -50,6 +56,7 @@ jobs:
   fmt:
     name: Format
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -64,6 +71,7 @@ jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
     needs: prepare
     steps:
       - name: Checkout
@@ -83,6 +91,7 @@ jobs:
   audit:
     name: Security Audit
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -98,6 +107,7 @@ jobs:
   deny:
     name: Dependency Policy
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -110,6 +120,7 @@ jobs:
   test:
     name: Tests
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
     needs: prepare
     steps:
       - name: Checkout
@@ -147,7 +158,6 @@ jobs:
   build:
     name: Build ${{ matrix.target }}
     runs-on: ubuntu-latest
-    needs: [pre-commit, fmt, lint, audit, deny, test, coverage]
     strategy:
       fail-fast: false
       matrix:
@@ -170,6 +180,9 @@ jobs:
         uses: Swatinem/rust-cache@v2
         with:
           key: ${{ matrix.target }}-release # release builds have different artifacts
+      - name: Install wasm-pack
+        if: matrix.kind == 'wasm-pack'
+        uses: taiki-e/install-action@wasm-pack
       - name: Prepare dist directory
         run: |
           rm -rf dist
@@ -183,9 +196,6 @@ jobs:
             strip target/x86_64-unknown-linux-gnu/release/kuack-checker
             cp target/x86_64-unknown-linux-gnu/release/kuack-checker dist/kuack-checker
           else
-            if ! command -v wasm-pack >/dev/null 2>&1; then
-              cargo install wasm-pack --locked
-            fi
             wasm-pack build --release --target web
             rm -rf dist/pkg
             cp -R pkg dist/pkg
@@ -199,7 +209,7 @@ jobs:
   ci-passed:
     name: CI Passed
     runs-on: ubuntu-latest
-    if: always()
+    if: always() && github.event_name == 'pull_request'
     needs: [pre-commit, fmt, lint, audit, deny, test, coverage, build]
     steps:
       - name: Check status of all required jobs
