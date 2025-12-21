@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
@@ -42,6 +44,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
       - name: Install toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -60,6 +64,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
       - name: Install toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -76,6 +82,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
       - name: Install toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -95,6 +103,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
       - name: Install toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -111,6 +121,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
       # cargo-deny is a standalone binary, it doesn't need a rust toolchain installed
       - name: Install cargo-deny
         uses: taiki-e/install-action@cargo-deny
@@ -125,6 +137,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
       - name: Install toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -142,6 +156,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
       - name: Install toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -171,6 +187,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
       - name: Install toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
