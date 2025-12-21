@@ -1,3 +1,9 @@
+## [1.0.2](https://github.com/kuack-io/checker/compare/1.0.1...1.0.2) (2025-12-21)
+
+### Dependencies
+
+* **deps:** bump actions/upload-artifact from 4 to 6 ([6648bd5](https://github.com/kuack-io/checker/commit/6648bd5f2d3c42251eb105a45c134ed6ea60e75e))
+
 ## [1.0.1](https://github.com/kuack-io/checker/compare/1.0.0...1.0.1) (2025-12-21)
 
 # 1.0.0 (2025-12-21)
