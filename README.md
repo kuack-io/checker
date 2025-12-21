@@ -21,12 +21,12 @@ TARGET_URL=https://kuack.io ./kuack-checker
 Download and run the latest WASM bundle from the [Releases page](https://github.com/kuack-io/checker/releases). Requires python3.
 
 ```bash
-curl -L -O https://github.com/kuack-gh/checker/releases/latest/download/kuack-checker-wasm32-web.tar.gz
+curl -L -O https://github.com/kuack-io/checker/releases/latest/download/kuack-checker-wasm32-web.tar.gz
 tar -xzf kuack-checker-wasm32-web.tar.gz
-python3 -m http.server 8081
+python3 -m http.server 8087
 ```
 
-Then open <http://localhost:8081/test-browser.html>
+Then open <http://localhost:8087/test-browser.html>
 
 ### Docker (Linux)
 
@@ -43,10 +43,10 @@ id=$(docker create ghcr.io/kuack-io/checker:wasm-latest)
 docker cp $id:/pkg .
 docker cp $id:/test-browser.html .
 docker rm -v $id
-python3 -m http.server 8081
+python3 -m http.server 8087
 ```
 
-Then open <http://localhost:8081/test-browser.html>
+Then open <http://localhost:8087/test-browser.html>
 
 ### From Sources (Linux)
 
