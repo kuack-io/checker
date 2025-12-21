@@ -1,3 +1,9 @@
+## [1.0.6](https://github.com/kuack-io/checker/compare/1.0.5...1.0.6) (2025-12-21)
+
+### Bug Fixes
+
+* do not run linters and some checkers on merge to main ([d8a8363](https://github.com/kuack-io/checker/commit/d8a83630a73f9ceda788384598016e4d22bcd5f4))
+
 ## [1.0.5](https://github.com/kuack-io/checker/compare/1.0.4...1.0.5) (2025-12-21)
 
 ### Dependencies
