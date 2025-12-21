@@ -77,7 +77,7 @@ jobs:
           token: ${{ secrets.SEMANTIC_RELEASE_TOKEN }} # we shouldn't use default token here! It will be cached and will break semantic release!
 
       - name: Download build outputs
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: release-build
           path: dist
@@ -124,7 +124,7 @@ jobs:
           fetch-depth: 1
 
       - name: Download raw build outputs
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: release-build
           path: dist
