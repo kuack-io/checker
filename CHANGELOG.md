@@ -1,3 +1,9 @@
+## [1.0.9](https://github.com/kuack-io/checker/compare/1.0.8...1.0.9) (2025-12-21)
+
+### Dependencies
+
+* **deps:** bump actions/cache from 4 to 5 ([8d51d01](https://github.com/kuack-io/checker/commit/8d51d015a2bdb1d216059f022f84c379153bf458))
+
 ## [1.0.8](https://github.com/kuack-io/checker/compare/1.0.7...1.0.8) (2025-12-21)
 
 ### Dependencies
