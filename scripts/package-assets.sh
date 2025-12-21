@@ -34,12 +34,12 @@ fi
 rm -rf "$OUTPUT_DIR"
 mkdir -p "$OUTPUT_DIR"
 
-LINUX_ARCHIVE="$OUTPUT_DIR/kuack-checker-${VERSION}-linux-x86_64.tar.gz"
+LINUX_ARCHIVE="$OUTPUT_DIR/kuack-checker-linux-x86_64.tar.gz"
 cp "$LINUX_BIN" "$OUTPUT_DIR/kuack-checker"
 tar -C "$OUTPUT_DIR" -czf "$LINUX_ARCHIVE" kuack-checker
 rm -f "$OUTPUT_DIR/kuack-checker"
 
-tar -C "$DIST_DIR/wasm" -czf "$OUTPUT_DIR/kuack-checker-${VERSION}-wasm32-web.tar.gz" pkg test-browser.html
+tar -C "$DIST_DIR/wasm" -czf "$OUTPUT_DIR/kuack-checker-wasm32-web.tar.gz" pkg test-browser.html
 
 echo "Created release artifacts in $OUTPUT_DIR:"
 ls -lh "$OUTPUT_DIR"
