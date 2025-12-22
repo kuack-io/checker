@@ -21,7 +21,7 @@ jobs:
   pre-commit:
     name: Pre-commit
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main') # runs on main to update the cache used in PRs
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -41,10 +41,9 @@ jobs:
       - name: Run pre-commit
         uses: pre-commit/action@v3.0.1
 
-  # prepare, coverage, build and pre-commit still run on merge to main to update the cache used in PRs
-  prepare:
-    name: Prepare
-    runs-on: ubuntu-latest
+  install-deps:
+    name: Install Dependencies
+    runs-on: ubuntu-latest # runs in PRs, merge queues and on main
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -64,7 +63,7 @@ jobs:
   fmt:
     name: Format
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' || github.event_name == 'merge_group'
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -81,8 +80,8 @@ jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    needs: prepare
+    if: github.event_name == 'pull_request' || github.event_name == 'merge_group'
+    needs: install-deps
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -103,7 +102,7 @@ jobs:
   audit:
     name: Security Audit
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' # only run on PRs
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -121,7 +120,7 @@ jobs:
   deny:
     name: Dependency Policy
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' # only run on PRs
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -136,8 +135,8 @@ jobs:
   test:
     name: Tests
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    needs: prepare
+    if: github.event_name == 'pull_request' || github.event_name == 'merge_group'
+    needs: install-deps
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -157,7 +156,7 @@ jobs:
   coverage:
     name: Coverage
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main') # runs on main to update the cache used in PRs
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -170,16 +169,16 @@ jobs:
       - name: Cache cargo artifacts
         uses: Swatinem/rust-cache@v2
         with:
-          shared-key: "coverage-build" # tarpaulin recompiles binaries with extra flags, it can't share cache from prepare job
+          shared-key: "coverage-build" # tarpaulin recompiles binaries with extra flags, it can't share cache from install-deps job
       - name: Install cargo-tarpaulin
         uses: taiki-e/install-action@cargo-tarpaulin
       - name: Run coverage
         run: cargo tarpaulin --skip-clean --out Xml --fail-under 90 --exclude-files src/main.rs
 
-  build:
-    name: Build ${{ matrix.target }}
+  build-check:
+    name: Build Check
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' || github.event_name == 'merge_group'
     strategy:
       fail-fast: false
       matrix:
@@ -233,8 +232,8 @@ jobs:
   ci-passed:
     name: CI Passed
     runs-on: ubuntu-latest
-    if: always() && github.event_name == 'pull_request'
-    needs: [pre-commit, fmt, lint, audit, deny, test, coverage, build]
+    if: always() && github.event_name == 'pull_request' # only run on PRs
+    needs: [pre-commit, fmt, lint, audit, deny, test, coverage, build-check]
     steps:
       - name: Check status of all required jobs
         run: |
