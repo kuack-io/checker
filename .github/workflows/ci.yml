@@ -179,6 +179,7 @@ jobs:
     name: Build Check
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request' || github.event_name == 'merge_group'
+    needs: install-deps
     strategy:
       fail-fast: false
       matrix:
@@ -202,7 +203,7 @@ jobs:
       - name: Cache cargo artifacts
         uses: Swatinem/rust-cache@v2
         with:
-          key: ${{ matrix.target }}-release # release builds have different artifacts
+          shared-key: "debug-build"
       - name: Install wasm-pack
         if: matrix.kind == 'wasm-pack'
         uses: taiki-e/install-action@wasm-pack
