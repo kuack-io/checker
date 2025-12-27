@@ -265,7 +265,18 @@
     </main>
 
     <script type="module">
-        import init, { check_endpoint } from './pkg/kuack_checker.js';
+        import init, { check_endpoint, main } from './pkg/kuack_checker.js';
+
+        // Expose main for manual testing in console
+        window.runAgentMain = async (url) => {
+            console.log('Running agent main function...');
+            try {
+                await main({ TARGET_URL: url || 'https://kuack.io' });
+                console.log('Agent main finished successfully');
+            } catch (e) {
+                console.error('Agent main failed:', e);
+            }
+        };
 
         const output = document.getElementById('output');
         const checkBtn = document.getElementById('checkBtn');

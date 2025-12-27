@@ -82,3 +82,47 @@ fn build_http_client() -> reqwest::Client {
 fn elapsed_ms(start_time: &Instant) -> f64 {
     start_time.elapsed().as_secs_f64() * 1000.0
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_elapsed_ms() {
+        let start = Instant::now();
+        let elapsed = elapsed_ms(&start);
+        assert!(elapsed >= 0.0);
+    }
+
+    #[test]
+    fn test_build_http_client() {
+        let client = build_http_client();
+        assert!(client.get("http://localhost").build().is_ok());
+    }
+}
+
+#[cfg(all(target_family = "wasm", target_os = "unknown"))]
+#[wasm_bindgen]
+#[cfg(not(tarpaulin_include))]
+pub async fn main(env: JsValue) -> Result<(), JsValue> {
+    console_error_panic_hook::set_once();
+
+    let env_map: std::collections::HashMap<String, String> = serde_wasm_bindgen::from_value(env)
+        .map_err(|e| JsValue::from_str(&format!("Failed to parse env: {}", e)))?;
+
+    let target_url = env_map
+        .get("TARGET_URL")
+        .ok_or_else(|| JsValue::from_str("TARGET_URL environment variable is required"))?;
+
+    let metrics = measure_endpoint(target_url).await;
+
+    let json = serde_json::to_string(&metrics).map_err(|e| JsValue::from_str(&e.to_string()))?;
+
+    web_sys::console::log_1(&json.into());
+
+    if !metrics.success {
+        return Err(JsValue::from_str("Check failed"));
+    }
+
+    Ok(())
+}
