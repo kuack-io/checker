@@ -65,3 +65,10 @@ make run-browser
 ```
 
 This will start a local server and open the test page in your default browser.
+
+You can also test the agent entry point manually in the browser console:
+
+```javascript
+// Run the main function as the agent would
+await window.runAgentMain('https://kuack.io');
+```
