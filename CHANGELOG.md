@@ -1,3 +1,9 @@
+## [1.0.11](https://github.com/kuack-io/checker/compare/1.0.10...1.0.11) (2025-12-27)
+
+### Bug Fixes
+
+* remove warning ([5cfd63c](https://github.com/kuack-io/checker/commit/5cfd63c3f78e27e8b4c55ea0590f77e5d18ef4f2))
+
 ## [1.0.10](https://github.com/kuack-io/checker/compare/1.0.9...1.0.10) (2025-12-27)
 
 ### Bug Fixes
