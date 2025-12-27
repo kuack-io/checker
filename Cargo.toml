@@ -46,7 +46,7 @@ wiremock = "0.6"
 wasm-bindgen-test = "0.3"
 
 [lints.rust]
-unexpected_cfgs = { level = "warn", check-cfg = ['cfg(tarpaulin)'] }
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(tarpaulin)', 'cfg(tarpaulin_include)'] }
 
 [profile.release]
 opt-level = "z"     # Optimize for size
