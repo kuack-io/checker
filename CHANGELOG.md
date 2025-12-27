@@ -1,3 +1,9 @@
+## [1.0.10](https://github.com/kuack-io/checker/compare/1.0.9...1.0.10) (2025-12-27)
+
+### Bug Fixes
+
+* expose main ([621880e](https://github.com/kuack-io/checker/commit/621880e981e3e8d6190b09c459959a3aff1b3298))
+
 ## [1.0.9](https://github.com/kuack-io/checker/compare/1.0.8...1.0.9) (2025-12-21)
 
 ### Dependencies
