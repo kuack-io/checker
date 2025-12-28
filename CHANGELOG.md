@@ -1,3 +1,10 @@
+## [1.0.12](https://github.com/kuack-io/checker/compare/1.0.11...1.0.12) (2025-12-28)
+
+### Dependencies
+
+* **deps:** bump reqwest from 0.12.26 to 0.12.28 ([d44412b](https://github.com/kuack-io/checker/commit/d44412bee1b8706f92fc0d627e5d3a9f6169ae54))
+* **deps:** bump serde_json from 1.0.145 to 1.0.148 ([69f69e9](https://github.com/kuack-io/checker/commit/69f69e94b5665a53b27c75af31dbce46b240bfa7))
+
 ## [1.0.11](https://github.com/kuack-io/checker/compare/1.0.10...1.0.11) (2025-12-27)
 
 ### Bug Fixes
